@@ -30,6 +30,7 @@ import (
 	"github.com/containerd/containerd/images"
 	"github.com/containerd/containerd/log"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	artifactspec "github.com/oras-project/artifacts-spec/specs-go/v1"
 	"github.com/pkg/errors"
 )
 
@@ -93,7 +94,8 @@ func (r dockerFetcher) Fetch(ctx context.Context, desc ocispec.Descriptor) (io.R
 		switch desc.MediaType {
 		case images.MediaTypeDockerSchema2Manifest, images.MediaTypeDockerSchema2ManifestList,
 			images.MediaTypeDockerSchema1Manifest,
-			ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex:
+			ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex,
+			artifactspec.MediaTypeArtifactManifest:
 
 			var firstErr error
 			for _, host := range r.hosts {

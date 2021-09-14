@@ -318,6 +318,9 @@ github.com/opencontainers/runtime-spec/specs-go
 github.com/opencontainers/selinux/go-selinux
 github.com/opencontainers/selinux/go-selinux/label
 github.com/opencontainers/selinux/pkg/pwalk
+# github.com/oras-project/artifacts-spec v0.0.0-20210910233110-813953a626ae
+## explicit
+github.com/oras-project/artifacts-spec/specs-go/v1
 # github.com/pelletier/go-toml v1.9.3
 ## explicit
 github.com/pelletier/go-toml

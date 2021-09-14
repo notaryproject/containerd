@@ -28,6 +28,8 @@ import (
 	"github.com/containerd/containerd/platforms"
 	digest "github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	v1 "github.com/opencontainers/image-spec/specs-go/v1"
+	artifactspec "github.com/oras-project/artifacts-spec/specs-go/v1"
 	"github.com/pkg/errors"
 )
 
@@ -357,6 +359,30 @@ func Children(ctx context.Context, provider content.Provider, desc ocispec.Descr
 		}
 
 		descs = append(descs, index.Manifests...)
+	case artifactspec.MediaTypeArtifactManifest:
+		p, err := content.ReadBlob(ctx, provider, desc)
+		if err != nil {
+			return nil, err
+		}
+
+		var artifact artifactspec.Manifest
+		if err := json.Unmarshal(p, &artifact); err != nil {
+			return nil, err
+		}
+
+		appendDesc := func(artifacts ...artifactspec.Descriptor) {
+			for _, desc := range artifacts {
+				descs = append(descs, v1.Descriptor{
+					MediaType:   desc.MediaType,
+					Digest:      desc.Digest,
+					Size:        desc.Size,
+					URLs:        desc.URLs,
+					Annotations: desc.Annotations,
+				})
+			}
+		}
+
+		appendDesc(artifact.Blobs...)
 	default:
 		if IsLayerType(desc.MediaType) || IsKnownConfig(desc.MediaType) {
 			// childless data types.
