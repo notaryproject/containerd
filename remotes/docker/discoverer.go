@@ -48,7 +48,7 @@ func (r dockerDiscoverer) Discover(ctx context.Context, desc ocispec.Descriptor,
 	}
 
 	v := url.Values{}
-	v.Set("artifact-type", artifactType)
+	v.Set("artifactType", artifactType)
 	query := "?" + v.Encode()
 
 	var firstErr error
